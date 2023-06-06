@@ -1,0 +1,56 @@
+service: SQSWorks
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+
+plugins:
+  - serverless-apigateway-service-proxy
+  - serverless-lift
+custom: 
+   apiGatewayServiceProxies:
+    - sqs:
+        path: /likeuser
+        method: post
+        queueName: likequeue
+        cors: true
+        response:
+          template:
+            # `success` is used when the integration response is 200
+            success: |-
+              { "message: "accepted" }
+            # `clientError` is used when the integration response is 400
+            clientError: |-
+              { "message": "there is an error in your request" }
+            # `serverError` is used when the integration response is 500
+            serverError: |-
+              { "message": "there was an error handling your request" }
+
+
+
+constructs:
+  sqs-queue:
+    type: queue
+    batchSize: 1
+    worker:
+      handler: likeuser/handler.likeuser
+      package: 
+        patterns: 
+          - "likeuser/handler.js"
+    extensions:
+      queue:
+        Properties:
+          QueueName: likequeue
+
+#functions:
+ # producer:
+  #  handler: index.producer
+   # events:
+   #   - httpApi:
+    #      method: post
+     #     path: /produce
+   # environment:
+   #   QUEUE_URL: ${construct:jobs.queueUrl}
+

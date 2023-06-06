@@ -1,0 +1,11 @@
+{
+  "name": "SQSWorks",
+  "version": "1.0.0",
+  "description": "Serverless Framework Node SQS Producer-Consumer on AWS",
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "serverless-apigateway-service-proxy": "^2.2.1",
+    "serverless-lift": "^1.26.2"
+  }
+}
